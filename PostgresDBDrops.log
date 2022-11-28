@@ -1,0 +1,45 @@
+postgres@ip-172-32-1-235:/home/jayeshrk$ psql
+psql (9.5.24)
+Type "help" for help.
+
+postgres=# \c master_tool_db 
+You are now connected to database "master_tool_db" as user "postgres".
+master_tool_db=# DROP TABLE insurer_vehicle_master;
+DROP TABLE
+master_tool_db=# DROP TABLE insurer_make_model;
+DROP TABLE
+master_tool_db=# DROP TABLE tm_make_model;
+ERROR:  cannot drop table tm_make_model because other objects depend on it
+DETAIL:  constraint tm_make_model_cv_typ_tmmakemodel_id_fbf64377_fk_tm_make_m on table tm_make_model_cv_type depends on table tm_make_model
+constraint tm_vehicle_master_tm_make_model_id_709d29bc_fk_tm_make_model_id on table tm_vehicle_master depends on table tm_make_model
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+master_tool_db=# DROP tm_make_model_cv_type;
+ERROR:  syntax error at or near "tm_make_model_cv_type"
+LINE 1: DROP tm_make_model_cv_type;
+             ^
+master_tool_db=# DROP TABLE tm_make_model_cv_type;
+DROP TABLE
+master_tool_db=# DROP TABLE tm_make_model;
+ERROR:  cannot drop table tm_make_model because other objects depend on it
+DETAIL:  constraint tm_vehicle_master_tm_make_model_id_709d29bc_fk_tm_make_model_id on table tm_vehicle_master depends on table tm_make_model
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+master_tool_db=# SELECT * FROM tm_vehicle_master LIMIT1;
+ created | modified | id | variant | gvw | seating_capacity | cubic_capacity | fuel_type | tm_make_model_id | is_active | last_active_changed 
+---------+----------+----+---------+-----+------------------+----------------+-----------+------------------+-----------+---------------------
+(0 rows)
+
+master_tool_db=# SELECT * FROM tm_vehicle_master LIMIT 1;
+ created | modified | id | variant | gvw | seating_capacity | cubic_capacity | fuel_type | tm_make_model_id | is_active | last_active_changed 
+---------+----------+----+---------+-----+------------------+----------------+-----------+------------------+-----------+---------------------
+(0 rows)
+
+master_tool_db=# SELECT * FROM tm_vehicle_master;
+ created | modified | id | variant | gvw | seating_capacity | cubic_capacity | fuel_type | tm_make_model_id | is_active | last_active_changed 
+---------+----------+----+---------+-----+------------------+----------------+-----------+------------------+-----------+---------------------
+(0 rows)
+
+master_tool_db=# DROP TABLE tm_vehicle_master;
+DROP TABLE
+master_tool_db=# DROP TABLE tm_make_model;
+DROP TABLE
+master_tool_db=# 

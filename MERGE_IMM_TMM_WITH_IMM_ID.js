@@ -5,11 +5,6 @@ const imm = require("./UTIL/sheetToJson").getSheetOne(
     "sheets/insurer_make_model_export.xlsx"
 );
 
-console.log('tmm[0]');
-console.log(tmm[0]);
-console.log('imm[0]');
-console.log(imm[0]);
-
 const merged = [];
 
 let common = 0;
@@ -21,19 +16,22 @@ for (let i = 0; i < Math.min(imm.length, tmm.length); i++) {
 
     let id = "";
     if (tmmObj.id == immObj.tm_make_model_id) {
-        id = immObj.id;
         common++;
+        merged.push({
+            imm_id: immObj.id,
+            ...tmmObj,
+        });
     } else {
         id = findSameMakeModelFromIMM(tmmObj.id);
         if(id) {
             foundId++;
+            merged.push({
+                imm_id: id,
+                ...tmmObj
+            });
         }
         diff++;
     }
-    merged.push({
-        imm_id: id,
-        ...tmmObj,
-    });
 }
 
 console.log(`common : ${common}`);
@@ -52,11 +50,9 @@ function findSameMakeModelFromIMM(tmmId) {
     return "";
 }
 
+const reader = require("xlsx");
+const file = reader.readFile("sheets/ivm.xlsx");
 
-
-// const reader = require("xlsx");
-// const file = reader.readFile("sheets/merged_imm_tmm.xlsx");
-
-// const ws = reader.utils.json_to_sheet(merged);
-// reader.utils.book_append_sheet(file, ws, "imm_tmm_merged");
-// reader.writeFile(file, "sheets/merged_imm_tmm.xlsx");
+const ws = reader.utils.json_to_sheet(merged);
+reader.utils.book_append_sheet(file, ws, "ivm_import_data");
+reader.writeFile(file, "sheets/ivm.xlsx");
