@@ -1,5 +1,4 @@
 const client = require("./UTIL/db_connection").client;
-const reader = require("xlsx");
 const sheetOne = require("./UTIL/sheetToJson").getSheetOne("sheets/imm.xlsx");
 
 client.connect();
